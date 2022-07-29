@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title><%=nav%></title>
+    <%- include('include/head-scripts')%>
+  </head>
+
+  <body>
+    <%-include('include/header')%>
+
+      <section class="text-center py-5">
+          <h1 class="p-2">Article</h1>
+          <p class="p-2 text-muted">บทความต่างๆ ในเว็บไซต์</p>
+          <p>
+            <a href="#" class="btn btn-primary my-2">Main call to action</a>
+            <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+          </p>
+      </section>
+
+      <div class="p-5 bg-light">
+        <div class="container">
+          <div class="row">
+            <%
+            result.forEach((row) => {
+            %>
+            <div class="col-md-4">
+              <div class="card mb-4 box-shadow">
+                <img class="card-img-top" src="<%=row.img%>" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-text"><%=row.title%></h5>
+                  <p class="card-text"><%=row.content.replace(/(<([^>]+)>)/ig,'').substring(0, 180)%>...</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='/article/<%=row.id%>'">View</button>
+                    </div>
+                    <small class="text-muted"><%=row.time%></small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <%
+            })
+            %>
+          </div>
+        </div>
+
+        <%-include('include/footer')%>
+
+    <%- include('include/body-scripts')%>
+  </body>
+</html>
+

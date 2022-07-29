@@ -1,16 +1,3 @@
-# ************************************************************
-# Sequel Ace SQL dump
-# Version 20033
-#
-# https://sequel-ace.com/
-# https://github.com/Sequel-Ace/Sequel-Ace
-#
-# Host: us-cdbr-east-05.cleardb.net (MySQL 5.6.50-log)
-# Database: heroku_c05a629707c886e
-# Generation Time: 2022-07-29 09:59:44 +0000
-# ************************************************************
-
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;

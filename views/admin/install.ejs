@@ -9,50 +9,6 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header">Sunny-Framework Installation</div>
-                        <div class="p-4">
-                            <a href="/install/adminuser">Create admin user</a>
-                        </div>
-                        <div class="card-body">
-                            <%=admin_status%>
-                            <%
-                            if(locals.admin_status == true) {
-                            %>
-                            <span class="text-success">[+] Admin User are created.</span>
-                            <%
-                            } else {
-                            %>
-                            <span class="text-danger">[-] Admin database are not created.</span>
-                            <a href="/install/admindb">Create admin database</a><br>
-                            <%
-                            }
-                            %>
-                            <br>
-                            <%
-                            if(article_status == true) {
-                            %>
-                            <span class="text-success">[+] Article are created.</span>
-                            <%
-                            } else {
-                            %>
-                            <span class="text-danger">[-] Article are not created.</span>
-                            <a href="/install/articledb">Create Article table</a><br>
-                            <%
-                            }
-                            %>
-                            <br>
-                            <%
-                            if(setting_status == true) {
-                            %>
-                            <span class="text-success">[+] Settings are created.</span>
-                            <%
-                            } else {
-                            %>
-                            <span class="text-danger">[-] Settings are not created.</span>
-                            <a href="/install/settingdb">Create Settings table</a><br>
-                            <%
-                            }
-                            %>
-                        </div>
                     </div>
                 </div>
             </div>

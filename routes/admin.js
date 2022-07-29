@@ -268,7 +268,35 @@ module.exports = function(app){
             res.end()
         }
     })
-    app.get('/admin/menu/add', (req,res) => {
+    app.get('/admin/web/menu/edit/:id', (req,res) => {
+        var id = req.params.id
+        if(req.session.admin) {
+            db.query("SELECT * FROM menu WHERE id = ?", [id], (err,result) => {
+                if(err) throw err
+                res.render('admin/edit_menu',{admin_name:req.session.admin_info,nav:'menu',result:result})
+                res.end()
+            })
+        } else {
+            res.redirect('/admin/login')
+            res.end()
+        }
+    })
+    app.post('/admin/web/menu/edit/:id', (req,res) => {
+        var id = req.params.id
+        var name = req.body.name
+        var url = req.body.url
+        if(req.session.admin) {
+            db.query('UPDATE menu SET name = ?, url = ? WHERE id = ?', [name,url,id], (err,result) => {
+                if(err) throw err
+                res.redirect('/admin/menu')
+                res.end()
+            })
+        } else {
+            res.redirect('/admin/login')
+            res.end()
+        }
+    })
+    app.get('/admin/web/menu/add', (req,res) => {
         if(req.session.admin) {
             res.render('admin/add_menu',{admin_name:req.session.admin_info,nav:'menu'})
             res.end()
@@ -277,7 +305,7 @@ module.exports = function(app){
             res.end()
         }
     })
-    app.post('/admin/menu/add', (req,res) => {
+    app.post('/admin/web/menu/add', (req,res) => {
         if(req.session.admin) {
             var name = req.body.name
             var url = req.body.url
@@ -295,9 +323,22 @@ module.exports = function(app){
             res.end()
         }
     })
+    app.get('/admin/web/menu/delete/:id', (req,res) => {
+        var id = req.params.id
+        if(req.session.admin) {
+            db.query("DELETE FROM menu WHERE id = ?", [id], (err,result) => {
+                if(err) throw err
+                res.redirect('/admin/menu')
+                res.end()
+            })
+        } else {
+            res.redirect('/admin/login')
+            res.end()
+        }
+    })
 
     //Web Content Route
-    app.get('/admin/web_content', (req,res) => {
+    app.get('/admin/web/contents', (req,res) => {
         if(req.session.admin) {
             db.query("SELECT * FROM web_content ORDER BY id DESC", (err,result) => {
                 if(err) throw err
@@ -309,7 +350,7 @@ module.exports = function(app){
             res.end()
         }
     })
-    app.get('/admin/web_content/add', (req,res) => {
+    app.get('/admin/web/contents/add', (req,res) => {
         if(req.session.admin) {
             res.render('admin/add_web_content',{admin_name:req.session.admin_name,nav:'web_content'})
             res.end()
@@ -318,19 +359,65 @@ module.exports = function(app){
             res.end()
         }
     })
-    app.post('/admin/web_content/add', (req,res) => {
+    app.post('/admin/web/contents/add', (req,res) => {
         if(req.session.admin) {
             var name = req.body.name
             var content = req.body.content
-            var addby = req.session.admin_name
+            var addby = "admin"
 
             db.query("INSERT INTO web_content(name,content,addby) VALUES(?,?,?)", [name,content,addby], (err,result) => {
                 if(err) {
                     throw err
                 } else {
-                    res.redirect('/admin/web_content')
+                    res.redirect('/admin/web/contents')
                     res.end()
                 }
+            })
+        } else {
+            res.redirect('/admin/login')
+            res.end()
+        }
+    })
+    app.get('/admin/web/contents/edit/:id', (req,res) => {
+        var id = req.params.id
+        if(req.session.admin) {
+            db.query("SELECT * FROM web_content WHERE id = ?", [id], (err,result) => {
+                if(err) throw err
+                res.render('admin/edit_web_content',{admin_name:req.session.admin_name,nav:'web_content',result:result})
+                res.end()
+            })
+        } else {
+            res.redirect('/admin/login')
+            res.end()
+        }
+    })
+    app.post('/admin/web/contents/edit/:id', (req,res) => {
+        if(req.session.admin) {
+            var id = req.params.id
+            var name = req.body.name
+            var content = req.body.content
+            var addby = req.body.addby
+
+            db.query("UPDATE web_content SET name = ?, content = ?, addby = ? WHERE id = ?", [name,content,addby,id], (err,result) => {
+                if(err) {
+                    throw err
+                } else {
+                    res.redirect('/admin/web/contents')
+                    res.end()
+                }
+            })
+        } else {
+            res.redirect('/admin/login')
+            res.end()
+        }
+    })
+    app.get('/admin/web/contents/delete/:id', (req,res) => {
+        var id = req.params.id
+        if(req.session.admin) {
+            db.query("DELETE FROM web_content WHERE id = ?", [id], (err,result) => {
+                if(err) throw err
+                res.redirect('/admin/web/contents')
+                res.end()
             })
         } else {
             res.redirect('/admin/login')

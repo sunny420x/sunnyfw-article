@@ -4,6 +4,7 @@ module.exports = function(app){
 
     //Variables Settings
     var default_password = "adminadmin"
+    const onlyLettersPattern = /^[A-Za-z]+$/
 
     function gettime() {
         let ts = Date.now()
@@ -80,107 +81,132 @@ module.exports = function(app){
             }
         })
     })
-    app.get('/admin/article', (req,res) => {
+    app.get('/admin/:table', (req,res) => {
+
         if(req.session.admin) {
-            db.query("SELECT * FROM articles ORDER BY id DESC", (err,result) => {
-                if(err) throw err
-                res.render('admin/article',{admin_name:req.session.admin_name,nav:'article',result:result})
-                res.end()
-            })
+            var table = req.params.table
+            if(table.match(onlyLettersPattern)) {
+                db.query("SELECT * FROM "+table+" ORDER BY id DESC", (err,result) => {
+                    if(err) throw err
+                    res.render('admin/'+table,{admin_name:req.session.admin_name,nav:table,result:result})
+                    res.end()
+                })
+            } 
         } else {
             res.redirect('/admin/login')
             res.end()
         }
     })
-    app.get('/admin/article/edit/:id', (req,res) => {
+    app.get('/admin/:table/edit/:id', (req,res) => {
+
         if(req.session.admin) {
             let id = req.params.id
-            if(id) {
-                db.query("SELECT * FROM articles WHERE id = ?", [id], (err,result) => {
-                    if(err) {
-                        throw err
-                    } else {
-                        if(result.length > 0) {
-                            res.render('admin/edit_article', {admin_name:req.session.admin_name,nav:'article',result:result})
-                            res.end()
+            var table = req.params.table
+            console.log(table)
+            //if(table.match(onlyLettersPattern)) {
+                if(id) {
+                    db.query("SELECT * FROM "+table+" WHERE id = ?", [id], (err,result) => {
+                        if(err) {
+                            throw err
                         } else {
-                            res.send('[-] No row')
-                            res.end()
+                            if(result.length > 0) {
+                                res.render('admin/edit_article', {admin_name:req.session.admin_name,nav:table,result:result})
+                                res.end()
+                            } else {
+                                res.send('[-] No row')
+                                res.end()
+                            }
                         }
-                    }
-                })
+                    })
+                //}
             }
         } else {
             res.redirect('/admin/login')
             res.end() 
         }
     })
-    app.post('/admin/article/edit/:id', (req,res) => {
+    app.post('/admin/:table/edit/:id', (req,res) => {
+
         let id = req.params.id
         var title = req.body.title
         var time = req.body.time
         var postby = req.body.postby
         var content = req.body.content
         var img = req.body.img
-        if(id) {
-            db.query("UPDATE articles SET title = ?, content = ?, img = ?, time = ?, postby = ? WHERE id = ?", [title,content,img,time,postby,id], (err,result) => {
-                if(err) {
-                    throw err
-                } else {
-                    if(result) {
-                        res.redirect('/admin/article/edit/'+id)
-                        res.end()
+
+        var table = req.params.table
+        if(table.match(onlyLettersPattern)) {
+            if(id) {
+                db.query("UPDATE "+table+" SET title = ?, content = ?, img = ?, time = ?, postby = ? WHERE id = ?", [title,content,img,time,postby,id], (err,result) => {
+                    if(err) {
+                        throw err
                     } else {
-                        res.redirect('/admin/login')
-                        res.end()
+                        if(result) {
+                            res.redirect('/admin/'+table+'/edit/'+id)
+                            res.end()
+                        } else {
+                            res.redirect('/admin/login')
+                            res.end()
+                        }
                     }
-                }
-            })
+                })
+            }
         }
 
     })
-    app.get('/admin/article/add', (req,res) => {
+    app.get('/admin/:table/add', (req,res) => {
+
         if(req.session.admin) {
-            res.render('admin/add_article',{admin_name:req.session.admin_name,nav:'article'})
-            res.end()
+            var table = req.params.table
+            if(table.match(onlyLettersPattern)) {
+                res.render('admin/add_article',{admin_name:req.session.admin_name,nav:table})
+                res.end()
+            }
         } else {
             res.redirect('/admin/login')
             res.end()
         }
     })
-    app.post('/admin/article/add', (req,res) => {
+    app.post('/admin/:table/add', (req,res) => {
+
         if(req.session.admin) {
             var title = req.body.title
             var content = req.body.content
             var img = req.body.img
-            var postby = req.session.admin_name
+            var postby = "admin"
             var time = gettime()
 
-            db.query("INSERT INTO articles(title,content,img,postby,time) VALUES(?,?,?,?,?)", [title,content,img,postby,time], (err,result) => {
-                if(err) {
-                    throw err
-                } else {
-                    res.redirect('/admin/article')
-                    res.end()
-                }
-            })
+            var table = req.params.table
+            if(table.match(onlyLettersPattern)) {
+                db.query("INSERT INTO "+table+"(title,content,img,postby,time) VALUES(?,?,?,?,?)", [title,content,img,postby,time], (err,result) => {
+                    if(err) {
+                        throw err
+                    } else {
+                        res.redirect('/admin/'+table)
+                        res.end()
+                    }
+                })
+            }
         } else {
             res.redirect('/admin/login')
             res.end()
         }
     })
-    app.get('/admin/article/delete/:id', (req,res) => {
+    app.get('/admin/:table/delete/:id', (req,res) => {
+ 
         if(req.session.admin) {
             var id = req.params.id
-
-            db.query("DELETE FROM articles WHERE id = ?", [id], (err,result) => {
-                if(err) {
-                    throw err
-                } else {
-                    res.redirect('/admin/article')
-                    res.end()
-                }
-            })
+            var table = req.params.table
+            if(table.match(onlyLettersPattern)) {
+                db.query("DELETE FROM "+table+" WHERE id = ?", [id], (err,result) => {
+                    if(err) {
+                        throw err
+                    } else {
+                        res.redirect('/admin/'+table)
+                        res.end()
+                    }
+                })
+            }
         } else {
             res.redirect('/admin/login')
             res.end()
@@ -220,6 +246,47 @@ module.exports = function(app){
                     throw err
                 } else {
                     res.redirect('/admin/setting')
+                    res.end()
+                }
+            })
+        } else {
+            res.redirect('/admin/login')
+            res.end()
+        }
+    })
+
+    //Web Menu Route
+    app.get('/admin/menu', (req,res) => {
+        if(req.session.admin) {
+            db.query("SELECT * FROM menu ORDER BY id DESC", (err,result) => {
+                if(err) throw err
+                res.render('admin/setting',{admin_name:req.session.admin_info,nav:'menu',result:result})
+                res.end()
+            })
+        } else {
+            res.redirect('/admin/login')
+            res.end()
+        }
+    })
+    app.get('/admin/menu/add', (req,res) => {
+        if(req.session.admin) {
+            res.render('admin/add_menu',{admin_name:req.session.admin_info,nav:'menu'})
+            res.end()
+        } else {
+            res.redirect('/admin/login')
+            res.end()
+        }
+    })
+    app.post('/admin/menu/add', (req,res) => {
+        if(req.session.admin) {
+            var name = req.body.name
+            var url = req.body.url
+
+            db.query("INSERT INTO menu(name,url) VALUES(?,?)", [name,url], (err,result) => {
+                if(err) {
+                    throw err
+                } else {
+                    res.redirect('/admin/menu')
                     res.end()
                 }
             })

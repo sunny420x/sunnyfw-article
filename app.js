@@ -44,7 +44,6 @@ function timeStamp(message){
 
 //Routing
 require('./routes/admin')(app)
-//require('./routes/articles')(app)
 
 //Start Listening
 app.listen(process.env.PORT || port,() => {

@@ -21,7 +21,10 @@
                                 </div>
                                 <div class="form-group mb-2">
                                     <label>Content (max: 20,000)</label>
-                                    <textarea name="content" class="form-control mt-2" rows="5" maxlength="20000"></textarea>
+                                    <textarea name="content" class="form-control mt-2" rows="5" maxlength="20000" id="editor"></textarea>
+                                    <script>
+                                        CKEDITOR.replace( 'editor' );
+                                    </script>
                                 </div>
                                 <button type="submit" class="btn btn-primary mt-2">[+] Add setting</button>
                             </form>

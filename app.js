@@ -128,5 +128,5 @@ app.get('/:table/:id', (req,res) => {
 
 //Error Page
 app.get('*', (req, res) => {
-    res.status(404).render('error', {error:'ไม่พบหน้าที่คุณกำลังค้นหา (Page not found.)',nav:'error'})
+    res.status(404).render('error', {error:'404',nav:'error'})
 })

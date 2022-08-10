@@ -60,6 +60,7 @@ app.get('/', (req,res) => {
         if(!req.session.admin) {
             req.session.admin = true
             req.session.admin_info = req.signedCookies.admin_info
+            timeStamp('[+] Login By Cookie for '+req.session.admin_info)
         }
     }
 

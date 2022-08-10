@@ -2,6 +2,12 @@ module.exports = function(app){
     var db = require('../database')
     const crypto = require('crypto')
 
+    function timeStamp(message){
+        console.log('[' + new Date().toLocaleString('en-GB', {
+            timezone:'Asia/Bangkok'
+        }).substring(11,23) + ' ] ->', message)
+    }
+
     //Variables Settings
     var default_password = "adminadmin"
     const onlyLettersPattern = /^[A-Za-z]+$/
@@ -44,6 +50,7 @@ module.exports = function(app){
             if(!req.session.admin) {
                 req.session.admin = true
                 req.session.admin_info = req.signedCookies.admin_info
+                timeStamp('[+] Login By Cookie for '+req.session.admin_info)
             }
         }
 
@@ -57,6 +64,7 @@ module.exports = function(app){
     })
     app.get('/admin/logout', (req,res) => {
         if(req.session.admin) {
+            timeStamp('[+] '+req.signedCookies.admin_info+' has been logged out.')
             req.session.destroy()
             res.clearCookie('admin_info')
         }       
@@ -66,16 +74,19 @@ module.exports = function(app){
     app.post('/admin/login', (req,res) => {
         const sha256 = x => crypto.createHash('sha256').update(x, 'utf8').digest('hex')
         var username = req.body.username
-        var password = sha256(req.body.password)
+        var password = req.body.password
+        var password_hash = sha256(req.body.password)
 
-        db.query('SELECT * FROM admin WHERE username = ? AND password = ?', [username,password], (err,result) => {
+        db.query('SELECT * FROM admin WHERE username = ? AND password = ?', [username,password_hash], (err,result) => {
             if(result.length > 0) {
                 req.session.admin = true
                 req.session.admin_info = username
-                res.cookie('admin_info', username+"&"+password, {signed: true, maxAge: 24 * 60 * 60 * 1000})
+                res.cookie('admin_info', username+":"+password_hash, {signed: true, maxAge: 24 * 60 * 60 * 1000})
+                timeStamp('[+] Login OK for '+username)
                 res.redirect('/admin')
                 res.end()
             } else {
+                timeStamp('[!] Login Deny for '+username+':'+password+' -> Error: '+err)
                 res.redirect('/admin/login')
                 res.end()
             }

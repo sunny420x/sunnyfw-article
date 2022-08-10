@@ -39,7 +39,9 @@ app.use(session({
 
 //Customs Functions
 function timeStamp(message){
-    console.log( '[' + new Date().toISOString().substring(11,23) + '] ->', message)
+    console.log('[' + new Date().toLocaleString('en-GB', {
+        timezone:'Asia/Bangkok'
+    }).substring(11,23) + ' ] ->', message)
 }
 
 //Routing

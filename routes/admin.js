@@ -137,7 +137,7 @@ module.exports = function(app){
         }
     })
     app.post('/admin/:table/edit/:id', (req,res) => {
-
+        if(req.session.admin) {
         let id = req.params.id
         var title = req.body.title
         var time = req.body.time
@@ -163,7 +163,10 @@ module.exports = function(app){
                 })
             }
         }
-
+        } else {
+            res.redirect('/admin/login')
+            res.end()
+        }
     })
     app.get('/admin/:table/add', (req,res) => {
 

@@ -8,9 +8,6 @@ MYSQL_HOST=
 MYSQL_USERNAME=
 MYSQL_PASSWORD=
 MYSQL_DATABASE=
-
 DEFAULT_PASSWORD=
-
-# Secret Code For Crypto
 crypto_secret=
 </pre>

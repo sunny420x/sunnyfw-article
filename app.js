@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.json())
 
 //Cookie Secret Strings (* Please change!)
-app.use(cookieParser('SunnyFrameworkBabyyyyyyy')) 
+app.use(cookieParser('Sunny-FrameworkBaby~')) 
 
 //Session Config
 app.use(session({
@@ -34,16 +34,16 @@ app.use(session({
 	saveUninitialized: true
 }))
 
-//Customs Functions
-function timeStamp(message){
-    console.log('[' + new Date().toLocaleString('en-GB', {
-        timezone:'Asia/Bangkok'
-    }).substring(11,23) + ' ] ->', message)
-}
-
 //Routing
+const timeStamp = require('./routes/modules/timestamp')
 require('./routes/main')(app)
 
+//Check Database and tables and auto-install
+db.query("SELECT * FROM admin", (err,result) => {
+	if(err || result.length < 1) {
+		require('./routes/install')(app)
+	}
+})
 //Start Listening
 app.listen(process.env.PORT || port,() => {
     timeStamp("[+] Sunny-Framework has been started at default port or "+port)

@@ -1,20 +1,17 @@
-//Requires Basic Modules
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const path = require('path')
-//Require Cookie Parser Module
 const cookieParser = require('cookie-parser')
-//Require Encryption Module
 const crypto = require('crypto')
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 //App Settings
 const app = express()
-let port = 4444
+let port = process.env.PORT
 
 //Require Database
 var db = require('./database')
-const { end } = require('./database')
 
 //Set Static path (default: "/public")
 app.use(express.static(path.join(__dirname, "/public")))
@@ -45,7 +42,7 @@ function timeStamp(message){
 }
 
 //Routing
-require('./routes/admin')(app)
+require('./routes/main')(app)
 
 //Start Listening
 app.listen(process.env.PORT || port,() => {
@@ -53,81 +50,6 @@ app.listen(process.env.PORT || port,() => {
 })
 
 //Customs Route
-app.get('/', (req,res) => {
-    var show_on_page = "articles"
-
-    if(req.signedCookies.admin_info != undefined) {
-        if(!req.session.admin) {
-            req.session.admin = true
-            req.session.admin_info = req.signedCookies.admin_info
-            timeStamp('[+] Login By Cookie for '+req.session.admin_info)
-        }
-    }
-
-    db.query('SELECT * FROM '+show_on_page+' ORDER BY id DESC', (err,result) => {
-        db.query('SELECT * FROM menu', (err,menu) => {
-            if(err) throw err
-            res.render('home', {
-                nav:'home',
-                result:result,
-                menu:menu
-            })
-            res.end()
-        })
-    })
-})
-
-app.get('/:table', (req,res) => {
-    var table = req.params.table
-    var lists_layout = "lists-01"
-    const onlyLettersPattern = /^[A-Za-z]+$/
-    if(table.match(onlyLettersPattern)) {
-        db.query('SELECT * FROM '+table+' ORDER BY id DESC', (err,result) => {
-            if(err) throw err
-            db.query('SELECT * FROM menu', (err,menu) => {
-                if(err) throw err
-                res.render(lists_layout, {
-                    nav:table,
-                    menu:menu,
-                    result:result
-                })
-                res.end()
-            })
-        })
-    } else {
-        res.send("Only Charactor and Number are allowed.")
-        res.end()
-    }
-})
-
-app.get('/:table/:id', (req,res) => {
-    if(req.params.table) {
-        var table = req.params.table
-        var read_layout = "read-01"
-        const onlyLettersPattern = /^[A-Za-z]+$/
-        if(table.match(onlyLettersPattern)) {
-            if(req.params.id) {
-                var id = req.params.id
-                db.query('SELECT * FROM '+table+' WHERE id = ?', [id], (err,result) => {
-                    if(err) throw err
-                    db.query('SELECT * FROM menu', (err,menu) => {
-                        if(err) throw err
-                        res.render(read_layout, {
-                            nav:table,
-                            menu:menu,
-                            page:id,
-                            result:result
-                        })
-                        res.end()
-                    })
-                })
-            }
-        } else {
-            res.send("Only Charactor and Number are allowed.")
-            res.end()
-        }
-    }
-})
 
 //Error Page
 app.get('*', (req, res) => {

@@ -4,6 +4,5 @@ crypto
 ejs
 express
 express-session
-mysql
+mysql2
 path
-utill

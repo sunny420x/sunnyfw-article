@@ -4,7 +4,9 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const crypto = require('crypto')
+let crypto_secret = process.env.crypto_secret
 require('dotenv').config({ path: path.join(__dirname, '.env') });
+var sha256 = x => crypto.createHash('sha256', crypto_secret).update(x, 'utf8').digest('hex')
 
 //App Settings
 const app = express()
@@ -37,13 +39,16 @@ app.use(session({
 //Routing
 const timeStamp = require('./routes/modules/timestamp')
 require('./routes/main')(app)
+require('./routes/admin')(app,sha256)
 
 //Check Database and tables and auto-install
 db.query("SELECT * FROM admin", (err,result) => {
-	if(err || result.length < 1) {
-		require('./routes/install')(app)
+	if(err) {
+		require('./routes/install')(sha256)
 	}
 })
+
+
 //Start Listening
 app.listen(process.env.PORT || port,() => {
     timeStamp("[+] Sunny-Framework has been started at default port or "+port)

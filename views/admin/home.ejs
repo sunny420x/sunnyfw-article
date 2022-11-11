@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>Home</title>
     <%-include('../include/head')%>
 </head>
 <body>
     <%-include('../include/nav')%>
-    <div class="container white mt-70">
+    <div class="container white mt-70 mb-50">
         <div class="grid">
-            <div class="row-100">
+            <div class="row-80">
                 <div class="px-20">
-
+                    <table class="table">
+                        <tr>
+                            <th>#</th>
+                            <th>Titile</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                        <tr>
+                            <%
+                            contents.forEach((row) => {
+                            %>
+                            <td><%=row.id%></td>
+                            <td><%=row.title%></td>
+                            <td><button class="btn darkblue">Edit</button></td>
+                            <td><button class="btn red">Delete</button></td>
+                            <%
+                            })
+                            %>
+                        </tr>
+                    </table>
                 </div>
+            </div>
+            <div class="row-20">
+                <%-include('include/sidebar')%>
             </div>
         </div>
     </div>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Contents | Admin</title>
+    <%-include('../include/head')%>
+    <script src="/ckeditor/ckeditor.js"></script>
+</head>
+<body>
+    <%-include('../include/nav')%>
+    <div class="container white mt-70 mb-50">
+        <div class="grid">
+            <div class="row-80">
+                <div class="px-20">
+                    <form action="/admin/contents/add" method="post">
+                        <input type="text" name="title" id="">
+                        <textarea name="content" rows="5" id="editor"></textarea>
+                        <script>
+                            CKEDITOR.replace( 'editor' );
+                        </script>
+                        <input type="submit" value="Add" class="btn red">
+                    </form>
+                </div>
+            </div>
+            <div class="row-20">
+                <%-include('include/sidebar')%>
+            </div>
+        </div>
+    </div>
+    <%-include('../include/footer')%>
+</body>
+</html>

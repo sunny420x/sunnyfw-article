@@ -41,14 +41,6 @@ const timeStamp = require('./routes/modules/timestamp')
 require('./routes/main')(app)
 require('./routes/admin')(app,sha256)
 
-//Check Database and tables and auto-install
-db.query("SELECT * FROM admin", (err,result) => {
-	if(err) {
-		require('./routes/install')(sha256)
-	}
-})
-
-
 //Start Listening
 app.listen(process.env.PORT || port,() => {
     timeStamp("[+] Sunny-Framework has been started at default port or "+port)

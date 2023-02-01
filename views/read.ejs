@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%=result[0].title%> | Sunny-Framework</title>
+    <%-include('include/head')%>
+</head>
+<body>
+    <%-include('include/nav')%>
+    <div class="container white" id="mainpage">
+        <div class="grid-9-3">
+            <div>
+                <div class="pb-30">
+                    <div class="mb-30">
+                        <h1 class="mb-10"><%=result[0].title%></h1>
+                        <a href="/category/<%=result[0].category%>" class="capsule darkblue"><%=result[0].category%></a>
+                    </div>
+                    <img src="<%=result[0].cover%>" alt="Cover Image" class="w-100">
+                    <div class="mt-30">
+                        <p class="text-grey">Posted By <%=profile[0].name%></p>
+                        <%-result[0].contents%>
+                    </div>
+                    <div class="mt-30">
+                        <hr>
+                        <!-- Profile -->
+                        <div class="profile">
+                            <div class="grid-2-10">
+                                <img src="<%=profile[0].picture%>" alt="">
+                                <div>
+                                    <h2><%=profile[0].name%></h2>
+                                    <p><%=profile[0].bio%></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-20 pb-30">
+                <h1 class="bl-orange">More Contents</h1>
+                <div class="grid-1">
+                    <%
+                    more_contents.forEach((row) => {
+                    %>
+                    <div class="media">
+                        <div class="cover"><img class="w-100" src="https://sunny420x.com/img/default.jpg" /></div>
+                        <div class="content">
+                          <h1><a href="/read/<%=row.id%>"><%=row.title%></a></h1>
+                          <p><%=row.contents.replace(/(<([^>]+)>)/ig,'').substring(0,200)%></p>
+                        </div>
+                      </div>
+                    <%
+                    })
+                    %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%-include('include/footer')%>
+</body>
+</html>

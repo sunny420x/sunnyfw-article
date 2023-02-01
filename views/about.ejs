@@ -1,22 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home</title>
+    <title>About | Sunny-Framework</title>
     <%-include('include/head')%>
 </head>
 <body>
     <%-include('include/nav')%>
     <div class="container white mt-70">
-        <div class="grid">
-            <div class="row-70">
-                <div class="px-20">
-                    <h1 class="bl-red">About</h1>
-                </div>
+        <div class="grid-2">
+            <div class="row">
+                <h1 class="bl-red">About Us.</h1>
+                
             </div>
-            <div class="row-30">
-                <ul class="list">
-                    <a href=""><li>News</li></a>
-                </ul>
+            <div class="pb-40">
+                <h1 class="bl-green">Our Wriiters.</h1>
+                <%
+                profile.forEach((row) => {
+                %>
+                <!-- Profile -->
+                <div class="profile">
+                    <div class="grid-2-10">
+                        <img src="<%=row.picture%>" alt="Profile of Admin ID:<%=row.admin%>" class="w-100">
+                        <div>
+                            <h2><%=row.name%></h2>
+                            <p><%=row.bio%></p>
+                        </div>
+                    </div>
+                </div>
+                <%
+                })
+                %>
             </div>
         </div>
     </div>

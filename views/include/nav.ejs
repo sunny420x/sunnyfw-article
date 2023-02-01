@@ -1,10 +1,18 @@
 <div class="nav blacker">
   <div class="container">
     <div class="grid">
-      <button class="btn transparent text-white" id="collapse-btn" style="height: 52px;" onclick="collapse();">Button</button>
+      <button class="btn transparent text-white" id="collapse-btn" style="height: 52px;" onclick="collapse();"><i class="fa-solid fa-bars"></i></button>
       <ul class="px-10" id="collapse">
         <a href="/"><li>Home</li></a>
         <a href="/about"><li>About</li></a>
+        <%if(locals.is_admin == true) {%>
+          <li class="dropdown">
+              <a href="/admin">Admin</a>
+              <ul>
+                  <a href="/admin/logout"><li>Logout</li></a>
+              </ul>
+          </li>
+        <%}%>
       </ul>
     </div>
   </div>

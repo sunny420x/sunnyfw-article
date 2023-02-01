@@ -44,7 +44,7 @@ module.exports = (app,sha256) => {
                 req.session.username = username
                 res.cookie('login_info', username+":"+password_hash, {signed: true, maxAge: expires})
                 res.redirect('/admin')
-                timeStamp('[+] Login OK for '+username)
+                timeStamp('[+] Login Successfully for '+username)
                 res.end()
             }
         })
@@ -71,7 +71,7 @@ module.exports = (app,sha256) => {
                     res.render('admin/contents/edit', {content:content[0]})
                     res.end()
                 } else {
-                    timeStamp("Cannot fetch contents id = "+id)
+                    timeStamp("[!] Cannot fetch contents id = "+id)
                 }
             })
         } else {

@@ -42,15 +42,17 @@ module.exports = (app) => {
 
     //About Page
     app.get("/about", (req,res) => {
+        const is_admin = require('./modules/check_admin')(req,res)
         db.query("SELECT * FROM profile ORDER BY id ASC", (err,profile) => {
             if(err) throw err;
-            res.render('about', {profile:profile})
+            res.render('about', {profile:profile,is_admin:is_admin})
             res.end()
         })
     })
 
     //Read Page
     app.get("/read/:id", (req,res) => {
+        const is_admin = require('./modules/check_admin')(req,res)
         var id = req.params.id
         db.query("SELECT * FROM contents WHERE id = ? LIMIT 1", [id], (err,result) => {
             if(err) throw err;
@@ -62,7 +64,8 @@ module.exports = (app) => {
                     res.render('read', {
                         result:result,
                         more_contents:more_contents,
-                        profile:profile
+                        profile:profile,
+                        is_admin:is_admin
                     })
                     res.end()
                 })

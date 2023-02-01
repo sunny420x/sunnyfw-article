@@ -7,7 +7,7 @@ module.exports = (app,sha256) => {
         if(is_admin == true) {
             db.query("SELECT id,title FROM contents ORDER BY id DESC", (err,contents) => {
                 if(err) throw err;
-                res.render("admin/home", {contents:contents})
+                res.render("admin/home", {contents:contents,is_admin:is_admin})
                 res.end()
             })
         } else {
@@ -23,6 +23,19 @@ module.exports = (app,sha256) => {
             res.end()
         } else {
             res.render("admin/login")
+            res.end()
+        }
+    })
+
+    app.get('/admin/logout', (req,res) => {
+        if (req.session.loggedin) {
+            timeStamp('[+] '+req.signedCookies.login_info+' has been logged out.')
+            req.session.destroy()
+            res.clearCookie('login_info')
+            res.redirect('/admin/login')
+            res.end()
+        } else {
+            res.redirect('/admin/login')
             res.end()
         }
     })
@@ -57,7 +70,8 @@ module.exports = (app,sha256) => {
         if(is_admin == true) {
             res.render('admin/contents/add', {
                 is_admin:is_admin,
-                admin_info:admin_info[0]
+                admin_info:admin_info[0],
+                is_admin:is_admin
             })
             res.end()
         } else {

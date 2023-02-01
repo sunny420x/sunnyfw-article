@@ -21,6 +21,6 @@ crypto_secret=
 </pre>
 <ul>
     <li><b>PORT</b> is port of nodejs appication you want SunnyFW to running on.</li>
-    <li><b>DEFAULT_PASSWORD</p> is default admin password for first time installing databases.</li>
+    <li><b>DEFAULT_PASSWORD</b> is default admin password for first time installing databases.</li>
     <li><b>crypto_secret</b> is secret salt for secure hashing passwords.</li>
 </ul>

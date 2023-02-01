@@ -13,7 +13,7 @@ module.exports = (app) => {
 
     //Home Page
     app.get("/", (req,res) => {
-        const is_admin = require('./modules/check_admin')
+        const is_admin = require('./modules/check_admin')(req,res)
         if(check_install() != true) {
             require('./routes/install')(sha256)
             res.redirect("/")

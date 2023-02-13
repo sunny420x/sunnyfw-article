@@ -4,11 +4,20 @@ module.exports = (app,sha256) => {
 
     app.get("/admin", (req,res) => {
         var is_admin = require('./modules/check_admin')(req,res)
+        if(req.cookies.alert != undefined) {
+            var alert = req.cookies.alert
+            res.clearCookie('alert')
+        }
         if(is_admin == true) {
             db.query("SELECT id,title FROM contents ORDER BY id DESC", (err,contents) => {
                 if(err) throw err;
-                res.render("admin/home", {contents:contents,is_admin:is_admin})
-                res.end()
+                if(alert != undefined) {
+                    res.render("admin/home", {contents:contents,alert:alert,is_admin:is_admin})
+                    res.end()
+                } else {
+                    res.render("admin/home", {contents:contents,is_admin:is_admin})
+                    res.end()
+                }
             })
         } else {
             res.redirect("/admin/login")
@@ -18,11 +27,15 @@ module.exports = (app,sha256) => {
 
     app.get("/admin/login", (req,res) => {
         var is_admin = require('./modules/check_admin')(req,res)
+        if(req.cookies.alert != undefined) {
+            var alert = req.cookies.alert
+            res.clearCookie('alert')
+        }
         if(is_admin == true) {
             res.redirect("/admin")
             res.end()
         } else {
-            res.render("admin/login")
+            res.render("admin/login", {alert:alert})
             res.end()
         }
     })
@@ -32,6 +45,7 @@ module.exports = (app,sha256) => {
             timeStamp('[+] '+req.signedCookies.login_info+' has been logged out.')
             req.session.destroy()
             res.clearCookie('login_info')
+            res.cookie('alert', 'loggedout')
             res.redirect('/admin/login')
             res.end()
         } else {
@@ -56,8 +70,13 @@ module.exports = (app,sha256) => {
                 req.session.loggedin = true
                 req.session.username = username
                 res.cookie('login_info', username+":"+password_hash, {signed: true, maxAge: expires})
+                res.cookie('alert', "loggedin")
                 res.redirect('/admin')
                 timeStamp('[+] Login Successfully for '+username)
+                res.end()
+            } else {
+                res.cookie('alert', 'wrongpassword')
+                res.redirect('/admin/login')
                 res.end()
             }
         })
@@ -108,12 +127,21 @@ module.exports = (app,sha256) => {
     app.get("/admin/contents/edit/:id", (req,res) => {
         var is_admin = require('./modules/check_admin')(req,res)
         if(is_admin == true) {
+            if(req.cookies.alert != undefined) {
+                var alert = req.cookies.alert
+                res.clearCookie('alert')
+            }
             var id = req.params.id
             db.query("SELECT * FROM contents WHERE id = ? LIMIT 1", [id], (err,content) => {
                 if(err) throw err;
                 if(content.length > 0) {
-                    res.render('admin/contents/edit', {content:content[0],is_admin:is_admin})
-                    res.end()
+                    if(alert != undefined) {
+                        res.render('admin/contents/edit', {content:content[0],alert:alert,is_admin:is_admin})
+                        res.end()
+                    } else {
+                        res.render('admin/contents/edit', {content:content[0],is_admin:is_admin})
+                        res.end()
+                    }
                 } else {
                     timeStamp("[!] Cannot Fetch Contents id = "+id)
                 }
@@ -133,14 +161,13 @@ module.exports = (app,sha256) => {
             var cover = req.body.cover
             var category = req.body.category
             var is_show = req.body.is_show
-
             if(is_show != 1) {
                 is_show = 0
             }
-
             db.query("UPDATE contents SET title = ?, contents = ?, writter = ?, cover = ?, category = ?, is_show = ? WHERE id = ?",
             [title,content,writter,cover,category,is_show,id], (err,result) => {
                 if(err) throw err
+                res.cookie('alert', 'successfullyupdate')
                 res.redirect('/admin/contents/edit/'+id)
                 res.end()
             })
@@ -154,9 +181,9 @@ module.exports = (app,sha256) => {
         var is_admin = require('./modules/check_admin')(req,res)
         if(is_admin == true) {
             var id = req.params.id
-
             db.query("DELETE FROM contents WHERE id = ?", [id], (err,result) => {
                 if(err) throw err
+                res.cookie('alert', 'successfullydelete')
                 res.redirect('/admin')
                 res.end()
             })

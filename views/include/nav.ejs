@@ -6,8 +6,8 @@
         <a href="/"><li>Home</li></a>
         <a href="/about"><li>About</li></a>
         <%if(locals.is_admin == true) {%>
-          <li class="dropdown">
-              <a href="/admin">Admin</a>
+          <li class="dropdown" onclick="showhide(this)">
+              Admin
               <ul>
                   <a href="/admin/logout"><li>Logout</li></a>
               </ul>

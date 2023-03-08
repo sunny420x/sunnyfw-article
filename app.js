@@ -38,7 +38,7 @@ app.use(session({
 
 //Routing
 const timeStamp = require('./routes/modules/timestamp')
-require('./routes/main')(app)
+require('./routes/main')(app,sha256)
 require('./routes/admin')(app,sha256)
 
 //Start Listening

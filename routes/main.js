@@ -1,27 +1,9 @@
 module.exports = (app,sha256) => {
     let db = require('../database')
 
-    //Check Database and tables and auto-install
-    function check_install() {
-        db.query("SELECT * FROM admin", (err,result) => {
-            if(err) {
-                if(err.code = "ER_NO_SUCH_TABLE") {
-                    return false
-                }
-            } else {
-                return true;
-            }
-        })
-    }
-
     //Home Page
     app.get("/", (req,res) => {
         const is_admin = require('./modules/check_admin')(req,res)
-        if(check_install() != true) {
-            require('./install')(sha256)
-            res.redirect("/")
-            res.end()
-        }
         db.query("SELECT * FROM contents ORDER BY id DESC LIMIT 0,6", (err,contents) => {
             if(err) throw err;
             db.query("SELECT category FROM contents GROUP BY category", (err,category) => {
@@ -40,6 +22,22 @@ module.exports = (app,sha256) => {
                 }
                 res.end()
             })
+        })
+    })
+
+    app.get("/install", (req,res) => {
+        db.query("SELECT * FROM admin,products", (err,result) => {
+            if(err) {
+                if(err.code = "ER_NO_SUCH_TABLE") {
+                    require('./install')(sha256)
+                    res.cookie('alert', 'successfullyinstall')
+                    res.redirect("/")
+                    res.end()
+                }
+            } else {
+                res.redirect("/")
+                res.end()
+            }
         })
     })
 

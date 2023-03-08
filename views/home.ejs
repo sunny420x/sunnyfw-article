@@ -9,7 +9,7 @@
     <div class="container white py-20" id="mainpage">
         <div class="grid-1">
             <div class="grid-2">
-                <div class="cover"><img class="w-100" src="https://sunny420x.com/img/default.jpg" /></div>
+                <div class="cover"><img class="w-100" src="<%=contents[0].cover%>" /></div>
                 <div class="content">
                     <h1><a href="/read/<%=contents[0].id%>" class="link"><%=contents[0].title%></a></h1>
                     <p><%=contents[0].contents.replace(/(<([^>]+)>)/ig,'').substring(0,500)%></p>

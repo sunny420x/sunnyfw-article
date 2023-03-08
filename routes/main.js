@@ -1,21 +1,24 @@
-module.exports = (app) => {
+module.exports = (app,sha256) => {
     let db = require('../database')
 
     //Check Database and tables and auto-install
     function check_install() {
         db.query("SELECT * FROM admin", (err,result) => {
-            if(result < 1 || err) {
-                return false;
+            if(err) {
+                if(err.code = "ER_NO_SUCH_TABLE") {
+                    return false
+                }
+            } else {
+                return true;
             }
         })
-        return true;
     }
 
     //Home Page
     app.get("/", (req,res) => {
         const is_admin = require('./modules/check_admin')(req,res)
         if(check_install() != true) {
-            require('./routes/install')(sha256)
+            require('./install')(sha256)
             res.redirect("/")
             res.end()
         }

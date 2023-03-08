@@ -12,12 +12,16 @@ module.exports = (sha256) => {
     sql4 = "CREATE TABLE profile(id INT(6) AUTO_INCREMENT PRIMARY KEY, admin INT(6) NOT NULL, name VARCHAR(50) NOT NULL, bio VARCHAR(500), picture VARCHAR(200) DEFAULT '/image/default_profile.png')"
 
     db.query(sql1, (err,result) => {
+        if(err) throw err;
         timeStamp("[+] Create Table contents Successful!")
         db.query(sql2, (err,result) => {
+            if(err) throw err;
             timeStamp("[+] Create Table admin Successful!")
             db.query(sql3, [username,password], (err,result) => {
+                if(err) throw err;
                 timeStamp("[+] Create admin account Successful!")
                 db.query(sql4, (err,result) => {
+                    if(err) throw err;
                     timeStamp("[+] Create Table profile Successful!")
                 })
             })

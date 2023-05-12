@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Admin Profile | Sunny-Framework</title>
+    <%-include('../include/head')%>
+    <script src="/ckeditor/ckeditor.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <%-include('../include/nav')%>
+    <%-include('../include/alert')%>
+    <div class="container white mb-50" id="mainpage">
+        <div class="grid-8-4">
+            <div class="row">
+                <div class="tab">
+                    <a href="/admin" class="link">Admin</a> / Profile
+                </div>
+                <h1 class="bl-green">Admin Profile Management.</h1>
+                <form action="/admin/profile/edit" method="post">
+                    <input type="text" name="name" value="<%=profile[0].name%>" placeholder="Username">
+                    <input type="text" name="picture" value="<%=profile[0].picture%>" placeholder="Picture URL">
+                    <textarea name="bio" rows="5" id="editor"><%=profile[0].bio%></textarea>
+                    <script>
+                        CKEDITOR.replace( 'editor' );
+                    </script>
+                    <input type="submit" value="Save" class="btn darkblue">
+                </form>
+            </div>
+            <div class="row">
+                <%-include('include/sidebar')%>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

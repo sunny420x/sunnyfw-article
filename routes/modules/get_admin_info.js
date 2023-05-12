@@ -1,6 +1,5 @@
-module.exports = (req,res) => {
+module.exports = (req) => {
     const db = require('../../database')
     var admin_info = req.signedCookies.login_info
-    admin_info = admin_info.split(":")
-    return admin_info;
+    return admin_info = admin_info.split(":")
 }

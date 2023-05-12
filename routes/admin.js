@@ -1,6 +1,7 @@
 module.exports = (app,sha256) => {
     const db = require('../database')
     const timeStamp = require('./modules/timestamp')
+    const get_admin_info = require('./modules/get_admin_info')
 
     app.get("/admin", (req,res) => {
         var is_admin = require('./modules/check_admin')(req,res)
@@ -82,7 +83,7 @@ module.exports = (app,sha256) => {
         })
     })
 
-    //START Create Edit Delete Contents
+    // Create Edit Delete Contents
     app.get("/admin/contents/add", (req,res) => {
         var is_admin = require('./modules/check_admin')(req,res)
         var admin_info = require('./modules/get_admin_info')(req,res)
@@ -176,7 +177,6 @@ module.exports = (app,sha256) => {
             res.end()
         }
     })
-
     app.get("/admin/contents/delete/:id", (req,res) => {
         var is_admin = require('./modules/check_admin')(req,res)
         if(is_admin == true) {
@@ -192,5 +192,61 @@ module.exports = (app,sha256) => {
             res.end()
         }
     })
-    //END Create Edit Delete Contents
+    
+    // Profile Management
+    app.get("/admin/profile", (req,res) => {
+        var is_admin = require('./modules/check_admin')(req,res)
+        if(is_admin == true) {
+            if(req.cookies.alert != undefined) {
+                var alert = req.cookies.alert
+                res.clearCookie('alert')
+            }
+            const admin_info = get_admin_info(req)
+            const admin_username = admin_info[0]
+            const admin_password = admin_info[1]
+            db.query("SELECT id FROM admin WHERE username = ? AND password = ?", [admin_username,admin_password], (err,admin_id) => {
+                if(err) throw err;
+                admin_id = admin_id[0]
+                db.query("SELECT * FROM profile WHERE admin = ?", [admin_id], (err,profile) => {
+                    if(err) throw err;
+                    if(alert != undefined) {
+                        res.render('admin/profile',{profile:profile,alert:alert,is_admin:is_admin})
+                        res.end()
+                    } else {
+                        res.render('admin/profile',{profile:profile,is_admin:is_admin})
+                        res.end()
+                    }
+                })
+            })
+        } else {
+            res.redirect("/admin/login")
+            res.end()
+        }
+    })
+    app.post('/admin/profile/edit', (req,res) => {
+        var is_admin = require('./modules/check_admin')(req,res)
+        if(is_admin == true) {
+            const admin_info = get_admin_info(req)
+            const admin_username = admin_info[0]
+            const admin_password = admin_info[1]
+            
+            const name = req.body.name
+            const bio = req.body.bio
+            const picture = req.body.picture
+
+            db.query("SELECT id FROM admin WHERE username = ? AND password = ?", [admin_username,admin_password], (err,admin_id) => {
+                if(err) throw err;
+                admin_id = admin_id[0]
+                db.query("UPDATE profile SET name = ?, bio = ?, picture = ? WHERE admin = ?", [name,bio,picture,admin_id], (err,result) => {
+                    if(err) throw err;
+                    res.cookie('alert', 'successfullyupdate')
+                    res.redirect('/admin/profile')
+                    res.end()
+                })
+            })
+        } else {
+            res.redirect("/admin/login")
+            res.end()
+        }
+    })
 }

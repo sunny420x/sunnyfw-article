@@ -249,4 +249,55 @@ module.exports = (app,sha256) => {
             res.end()
         }
     })
+
+    // Change Password
+    app.get("/admin/change_password", (req,res) => {
+        var is_admin = require('./modules/check_admin')(req,res)
+        if(is_admin == true) {
+            if(req.cookies.alert != undefined) {
+                var alert = req.cookies.alert
+                res.clearCookie('alert')
+            }
+            if(alert != undefined) {
+                res.render('admin/change_password', {alert:alert,is_admin:is_admin})
+                res.end()
+            } else {
+                res.render('admin/change_password', {is_admin:is_admin})
+                res.end()
+            }
+        } else {
+            res.redirect("/admin/login")
+            res.end()
+        }
+    })
+    app.post("/admin/change_password", (req,res) => {
+        var is_admin = require('./modules/check_admin')(req,res)
+        if(is_admin == true) {
+            const admin_info = get_admin_info(req)
+            const admin_username = admin_info[0]
+            const admin_password = admin_info[1]
+
+            const current_password = req.body.current_password
+            const new_password = req.body.new_password
+
+            db.query("SELECT password FROM admin WHERE password = ?", [sha256(current_password)], (err,check_password) => {
+                if(err) throw err;
+                if(check_password.length > 0) {
+                    db.query("UPDATE admin SET password = ? WHERE username = ? AND password = ?", [sha256(new_password),admin_username,admin_password], (err,result) => {
+                        if(err) throw err;
+                        res.cookie('alert', 'successfullyupdate')
+                        res.redirect('/admin/logout')
+                        res.end()
+                    })
+                } else {
+                    res.cookie('alert', 'wrongpassword')
+                    res.redirect('/admin/change_password')
+                    res.end()
+                }
+            })
+        } else {
+            res.redirect("/admin/login")
+            res.end()
+        }
+    })
 }

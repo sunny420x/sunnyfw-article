@@ -6,14 +6,13 @@
 </head>
 <body>
     <%-include('include/nav')%>
-    <div class="container white py-20" id="mainpage">
-        <div class="grid-1">
-            <div class="grid-2">
-                <div class="cover"><img class="w-100" src="<%=contents[0].cover%>" /></div>
-                <div class="content">
-                    <h1><a href="/read/<%=contents[0].id%>" class="link"><%=contents[0].title%></a></h1>
-                    <p><%=contents[0].contents.replace(/(<([^>]+)>)/ig,'').substring(0,500)%></p>
-                </div>
+    <div class="container white p-30" id="mainpage">
+        <div class="media-x" id="big">
+            <div class="cover"><img class="w-100" src="<%=contents[0].cover%>" /></div>
+            <div class="content">
+                <h1 class="py-10 pt-0"><a href="/read/<%=contents[0].id%>" class="link"><%=contents[0].title%></a></h1>
+                <a href="/articles/category/<%=contents[0].category%>" class="capsule darkblue"><%=contents[0].category%></a>
+                <p><%=contents[0].contents.replace(/(<([^>]+)>)/ig,'').substring(0,500)%></p>
             </div>
         </div>
         <div class="grid-8-4">
@@ -26,7 +25,8 @@
                     <div class="media">
                         <div class="cover"><img class="w-100" src="<%=row.cover%>" /></div>
                         <div class="content">
-                          <h1><a href="/read/<%=row.id%>"><%=row.title%></a></h1>
+                          <h1 class="py-10 pt-0"><a href="/articles/<%=row.id%>"><%=row.title%></a></h1>
+                          <a href="/articles/category/<%=row.category%>" class="capsule darkblue"><%=row.category%></a>
                           <p><%=row.contents.replace(/(<([^>]+)>)/ig,'').substring(0,200)%></p>
                         </div>
                       </div>
@@ -40,7 +40,7 @@
                     <%
                     category.forEach((row) => {
                     %>
-                    <a href="" class="capsule darkblue"><%=row.category%></a>
+                    <a href="/articles/category/<%=row.category%>" class="capsule darkblue"><%=row.category%></a>
                     <%
                     })
                     %>

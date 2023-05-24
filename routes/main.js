@@ -1,43 +1,27 @@
 module.exports = (app,sha256) => {
     let db = require('../database')
+    require('./install')(app,sha256)
 
     //Home Page
     app.get("/", (req,res) => {
         const is_admin = require('./modules/check_admin')(req,res)
+        var alert
         db.query("SELECT * FROM contents ORDER BY id DESC LIMIT 0,6", (err,contents) => {
             if(err) throw err;
             db.query("SELECT category FROM contents GROUP BY category", (err,category) => {
                 if(err) throw err;
-                if(is_admin != undefined) {
-                    res.render('home', {
-                        contents:contents,
-                        category:category,
-                        is_admin:is_admin
-                    })
-                } else {
-                    res.render('home', {
-                        contents:contents,
-                        category:category
-                    })
+                if(req.cookies.alert != undefined) {
+                    alert = req.cookies.alert
+                    res.clearCookie('alert')
                 }
+                res.render('home', {
+                    contents:contents,
+                    category:category,
+                    alert:alert,
+                    is_admin:is_admin
+                })
                 res.end()
             })
-        })
-    })
-
-    app.get("/install", (req,res) => {
-        db.query("SELECT * FROM admin,products", (err,result) => {
-            if(err) {
-                if(err.code = "ER_NO_SUCH_TABLE") {
-                    require('./install')(sha256)
-                    res.cookie('alert', 'successfullyinstall')
-                    res.redirect("/")
-                    res.end()
-                }
-            } else {
-                res.redirect("/")
-                res.end()
-            }
         })
     })
 
@@ -51,8 +35,51 @@ module.exports = (app,sha256) => {
         })
     })
 
-    //Read Page
-    app.get("/read/:id", (req,res) => {
+    //Articles Page
+    app.get("/articles", (req,res) => {
+        const is_admin = require('./modules/check_admin')(req,res)
+        var alert
+        db.query("SELECT * FROM contents ORDER BY id DESC", (err,contents) => {
+            if(err) throw err;
+            db.query("SELECT category FROM contents GROUP BY category", (err,category) => {
+                if(err) throw err;
+                if(req.cookies.alert != undefined) {
+                    alert = req.cookies.alert
+                    res.clearCookie('alert')
+                }
+                res.render('articles', {
+                    contents:contents,
+                    category:category,
+                    alert:alert,
+                    is_admin:is_admin
+                })
+                res.end()
+            })
+        })
+    })
+    app.get("/articles/category/:category", (req,res) => {
+        const category = req.params.category
+        const is_admin = require('./modules/check_admin')(req,res)
+        var alert
+        db.query("SELECT * FROM contents WHERE category = ? ORDER BY id DESC", [category], (err,contents) => {
+            if(err) throw err;
+            db.query("SELECT category FROM contents GROUP BY category", (err,category) => {
+                if(err) throw err;
+                if(req.cookies.alert != undefined) {
+                    alert = req.cookies.alert
+                    res.clearCookie('alert')
+                }
+                res.render('articles', {
+                    contents:contents,
+                    category:category,
+                    alert:alert,
+                    is_admin:is_admin
+                })
+                res.end()
+            })
+        })
+    })
+    app.get("/articles/:id", (req,res) => {
         const is_admin = require('./modules/check_admin')(req,res)
         var id = req.params.id
         db.query("SELECT * FROM contents WHERE id = ? LIMIT 1", [id], (err,result) => {

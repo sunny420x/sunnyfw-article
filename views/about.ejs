@@ -8,23 +8,21 @@
     <%-include('include/nav')%>
     <div class="container white mt-70">
         <div class="grid-2">
-            <div class="row">
+            <div class="p-20">
                 <h1 class="bl-red">About Us.</h1>
                 
             </div>
-            <div class="pb-40">
+            <div class="p-20">
                 <h1 class="bl-green">Our Wriiters.</h1>
                 <%
                 profile.forEach((row) => {
                 %>
                 <!-- Profile -->
                 <div class="profile">
-                    <div class="grid-2-10">
-                        <img src="<%=row.picture%>" alt="Profile of Admin ID:<%=row.admin%>" class="w-100">
-                        <div>
-                            <h2><%=row.name%></h2>
-                            <p><%=row.bio%></p>
-                        </div>
+                    <img src="<%=row.picture%>" alt="Profile of Admin ID:<%=row.admin%>" class="w-100">
+                    <div>
+                        <h2><%=row.name%></h2>
+                        <p><%-row.bio%></p>
                     </div>
                 </div>
                 <%

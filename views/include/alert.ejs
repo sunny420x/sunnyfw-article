@@ -46,4 +46,13 @@
         })
         </script>
     <% } %>
+    <% if(locals.alert == "successfullyinstall") { %>
+        <script>
+        Swal.fire({
+        icon: 'success',
+        title: 'Successfully Installed!',
+        text: 'Default sql tables has been created!',
+        })
+        </script>
+    <% } %>
 <% } %>

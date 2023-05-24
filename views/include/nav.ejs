@@ -5,6 +5,12 @@
       <ul class="px-10" id="collapse">
         <a href="/"><li>Home</li></a>
         <a href="/about"><li>About</li></a>
+        <li class="dropdown" onclick="showhide(this)">
+          Pages
+          <ul>
+              <a href="/articles"><li>Articles</li></a>
+          </ul>
+        </li>
         <%if(locals.is_admin == true) {%>
           <li class="dropdown" onclick="showhide(this)">
               Admin

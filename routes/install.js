@@ -9,7 +9,7 @@ module.exports = (app,sha256) => {
     pages_check = "SELECT * FROM pages"
 
     //SQL Install Commands
-    contents_install = "CREATE TABLE contents(id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(200) NOT NULL, contents MEDIUMTEXT NOT NULL, category VARCHAR(50) NOT NULL, writter VARCHAR(50) NOT NULL, cover VARCHAR(200) DEFAULT '/image/default.jpeg', is_show INT(1) DEFAULT 0 NOT NULL)"
+    contents_install = "CREATE TABLE contents(id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(200) NOT NULL, contents MEDIUMTEXT NOT NULL, category VARCHAR(50) NOT NULL, writter VARCHAR(50) NOT NULL, cover VARCHAR(200) DEFAULT '/image/default.jpeg', views INT(6) DEFAULT 0 NOT NULL, is_show INT(1) DEFAULT 0 NOT NULL)"
     admin_install = "CREATE TABLE admin(id INT(6) AUTO_INCREMENT PRIMARY KEY, username VARCHAR(100) NOT NULL UNIQUE, password VARCHAR(200) NOT NULL)"
     admin_account_install = "INSERT INTO admin(username,password) VALUES('admin','"+sha256(process.env.DEFAULT_PASSWORD)+"')"
     profile_install = "CREATE TABLE profile(id INT(6) AUTO_INCREMENT PRIMARY KEY, admin INT(6) NOT NULL, name VARCHAR(50) NOT NULL, bio VARCHAR(500), picture VARCHAR(200) DEFAULT '/image/default_profile.png')"

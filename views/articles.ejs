@@ -19,6 +19,7 @@
                         <div class="cover"><img class="w-100" src="<%=row.cover%>" /></div>
                         <div class="content">
                           <h1 class="py-10 pt-0"><a href="/articles/<%=row.id%>"><%=row.title%></a></h1>
+                          <span class="mr-10"><i class="fa-solid fa-eye"></i> <%=row.views%></span>
                           <a href="/articles/category/<%=row.category%>" class="capsule darkblue"><%=row.category%></a>
                           <p><%=row.contents.replace(/(<([^>]+)>)/ig,'').substring(0,200)%></p>
                         </div>

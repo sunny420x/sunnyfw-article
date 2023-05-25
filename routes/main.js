@@ -92,13 +92,18 @@ module.exports = (app,sha256) => {
                 if(err) throw err;
                 db.query("SELECT * FROM profile WHERE admin = ?", [writter], (err,profile) => {
                     if(err) throw err;
-                    res.render('read', {
-                        result:result,
-                        more_contents:more_contents,
-                        profile:profile,
-                        is_admin:is_admin
+                    id = result[0].id
+                    views = parseInt(result[0].views)+1
+                    db.query("UPDATE contents SET views = ? WHERE id = ?", [views,id], (err) => {
+                        if(err) throw err;
+                        res.render('read', {
+                            result:result,
+                            more_contents:more_contents,
+                            profile:profile,
+                            is_admin:is_admin
+                        })
+                        res.end()
                     })
-                    res.end()
                 })
             })
         })

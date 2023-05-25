@@ -16,8 +16,10 @@
                     </div>
                     <img src="<%=result[0].cover%>" alt="Cover Image" class="w-100">
                     <div class="mt-20">
-                        <p class="capsule black w-max">Posted By <%=profile[0].name%></p>
-                        <%-result[0].contents%>
+                        <i class="fa-solid fa-eye"></i> <%=result[0].views%> <span class="capsule black w-max ml-10">Posted By <%=profile[0].name%></span><br>
+                        <div class="mt-20">
+                            <%-result[0].contents%>
+                        </div>
                     </div>
                     <div class="mt-30">
                         <!-- Profile -->
@@ -40,7 +42,7 @@
                     <div class="media">
                         <div class="cover"><img class="w-100" src="<%=row.cover%>" /></div>
                         <div class="content">
-                          <h1><a href="/read/<%=row.id%>"><%=row.title%></a></h1>
+                          <h1><a href="/articles/<%=row.id%>"><%=row.title%></a></h1>
                           <p><%=row.contents.replace(/(<([^>]+)>)/ig,'').substring(0,200)%></p>
                         </div>
                       </div>

@@ -1,22 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home | Sunny-Framework</title>
+    <title>Installation Page | Sunny-Framework</title>
     <%-include('include/head')%>
+    <meta name="robots" content="noindex">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <%-include('include/nav')%>
+    <%
+    let installed = false
+    if(tables_status.contents == true && tables_status.admin == true && tables_status.profile == true && tables_status.pages == true) {
+        installed = true
+    }
+    %>
     <br>
     <div class="container card rounded white p-20" id="mainpage">
         <h2 class="ml-10">Installation.</h2>
         <ul>
-           <li>Contents table status: </li>
-           <li>Admin table status: </li> 
-           <li>Profile table status: </li> 
-           <li>Pages table status: </li> 
+           <li>Contents table status: <%if(tables_status.contents == true) {%><span class="text-green">Installed</span><%} else {%><span class="text-red">Not Installed</span><%}%></li>
+           <li>Admin table status: <%if(tables_status.admin == true) {%><span class="text-green">Installed</span><%} else {%><span class="text-red">Not Installed</span><%}%></li> 
+           <li>Profile table status: <%if(tables_status.profile == true) {%><span class="text-green">Installed</span><%} else {%><span class="text-red">Not Installed</span><%}%></li> 
+           <li>Pages table status: <%if(tables_status.pages == true) {%><span class="text-green">Installed</span><%} else {%><span class="text-red">Not Installed</span><%}%></li> 
         </ul>
-        <button class="btn darkblue" onclick="window.location.href='/install/start'">Install</button>
+        <button class="btn darkblue" onclick="window.location.href='/install/start'" <%if(installed == true) {%>disabled<%}%> >Install</button>
     </div>
 </body>
 </html>

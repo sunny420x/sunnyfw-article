@@ -7,7 +7,10 @@ module.exports = (app,sha256) => {
         const is_admin = require('./modules/check_admin')(req,res)
         var alert
         db.query("SELECT * FROM contents ORDER BY id DESC LIMIT 0,6", (err,contents) => {
-            if(err) throw err;
+            if(err && err.code == "ER_NO_SUCH_TABLE") {
+                res.redirect('/install')
+                res.end()
+            }
             db.query("SELECT category FROM contents GROUP BY category", (err,category) => {
                 if(err) throw err;
                 if(req.cookies.alert != undefined) {

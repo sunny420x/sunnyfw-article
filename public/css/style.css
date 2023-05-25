@@ -5,7 +5,7 @@
     --nav-height: 50px;
     --nav-text-color: var(--grey);
     --nav-text-color-hover: var(--white);
-    --nav-bg: var(--dark);
+    --nav-bg: var(--blacker);
 }
 * {
     font-family: 'Kanit';

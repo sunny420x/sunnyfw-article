@@ -12,14 +12,15 @@
                 <div class="pb-30">
                     <div class="mb-30">
                         <h1 class="mb-10"><%=result[0].title%></h1>
-                        <a href="/category/<%=result[0].category%>" class="capsule darkblue"><%=result[0].category%></a>
+                        <i class="fa-solid fa-eye"></i> <%=result[0].views%> <span class="capsule black w-max ml-10">Posted By <%=profile[0].name%></span><br>
+                        <div class="mt-20">
+                            <a href="/category/<%=result[0].category%>" class="capsule darkblue"><%=result[0].category%></a>
+                        </div>
+                        
                     </div>
                     <img src="<%=result[0].cover%>" alt="Cover Image" class="w-100">
                     <div class="mt-20">
-                        <i class="fa-solid fa-eye"></i> <%=result[0].views%> <span class="capsule black w-max ml-10">Posted By <%=profile[0].name%></span><br>
-                        <div class="mt-20">
-                            <%-result[0].contents%>
-                        </div>
+                        <%-result[0].contents%>
                     </div>
                     <div class="mt-30">
                         <!-- Profile -->
